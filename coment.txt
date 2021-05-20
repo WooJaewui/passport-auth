@@ -1,0 +1,109 @@
+# Oauth, OpenID
+비밀번호를 알려주지 않고 일부의 data를 줄 수 있게되었다.
+
+# passport 설치하기.
+cmd     npm install -s passport
+        npm install -s passport-local          로컬방식 로그인 모듈 설치.
+
+file.js
+var passport = require('passport')
+    , LocalStrategy = require('passport-local').Strategy;
+
+app.use(passport.initialize());                passport 연결하기.
+app.use(passport.session());                   session을 이용해서 passport를 사용함.
+
+무조건 session 연결 code 다음에 passport 관련된 것들이 coding되어야 된다.
+local = 내가 직접 하는 방식.
+
+# passport 인증 구현.
+app.post('/auth/login_process', 
+    passport.authenticate('local', {
+        failureRedirect: '/auth/login'
+    }), function(request,response){
+        request.session.save(functioN(){
+            response.redirect('/');
+        })
+    }
+);
+
+# passport auth사용하기.
+passport.use(new LocalStrategy(
+  {
+    usernameField : 'email',
+    passwordField : 'pwd'
+  },
+  function(username, password, done) {
+    console.log('LocalStrategy', username, password);
+    if (username === authData.email){
+      console.log(1);
+      if (password === authData.password){
+        console.log(2);
+        return done(null, authData.nickname);
+      } else {
+        console.log(3);
+        return done(null, false, {
+          message : 'Incorrect password.'
+        })
+      }
+    } else {
+      console.log(4);
+      return done(null, false,{
+        message : 'Incorrect username.'
+      })
+    }
+  }
+));
+
+# session에 passport값을 저장하기.
+
+passport.serializeUser(function(user,done){
+    done(null, user);
+})
+
+var Data = {
+    id : ~~
+    profile : ~~
+    description : ~~
+}
+data를 변수에 담아둔다.
+
+session에 data를 저장할때 사용한다.
+
+passport.deserializeUser(function(id,done){
+    done(null, id);
+})
+
+serializerUser에서 저장된 sessionValue = id 값을 확인할 수 있다.
+
+# deserializeUser값 사용하기.
+request.user        deserializeUser의 id값을 얻을 수 있다.
+if(request.user)를 통해 login상태를 유지할 수 있다.
+
+# 로그아웃하기.
+request.logout();                         로그아웃된다.
+
+# 로그인중에 data와 계정이 틀린경우.
+cmd   npm install -s connect-flash
+
+file.js
+var flash = require('connect-flash');
+
+app.use(flash());                         flash 연결. !!session다음에 사용해야 된다.
+
+app.post('/auth/login_precess', 
+    passport.authenticate('local', {
+        failureRedirect: '/auth/login'
+        failureFlash : true                     failureFlash : true를 추가한다.
+    }), function(request,response){
+        request.session.save(functioN(){
+            response.redirect('/');
+        })
+    }
+);
+
+app.get('/path',function(req,res){
+  req.flash('val', 'message');
+})
+
+# flash 값 사용하기.
+request.flash();                                session에 flash값을 얻는 것.
