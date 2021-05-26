@@ -1,0 +1,13 @@
+# Federated Identity
+
+Federated identity      Access Token을 통해 Resource Server에 data를 쉽게 사용할 수 있게 해준다.
+                        
+
+# Google Federated identity
+
+1. ID, password 받기.                   Google Cloud Platform에서 project 등록하고 Oauth 인증
+2. ID script, 로그인 submit생성         
+3. onSignIn 설정.                       
+
+Google cloud platfom : https://console.cloud.google.com/
+Google SDK 관련정보 : https://developers.google.com/identity/sign-in/web/sign-in

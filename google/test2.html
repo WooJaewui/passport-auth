@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script>
+        function init(){
+            gapi.load('auth2', function() {
+                console.log('auth2');
+                var gauth = gapi.auth2.init({
+                    client_id: '639368394487-3coo7dc8h4vl6dt02qv6gr82par33v66.apps.googleusercontent.com'
+                })
+                gauth.then(function(){
+                    console.log('googleAuth Success');
+                    var loginBtn = document.querySelector('#loginBtn');
+                    if(gauth.isSignedIn.get){
+                        console.log('logined');
+                        loginBtn = 'Logout';
+                    } else {
+                        console.log('logouted');
+                        loginBtn = 'Login';
+                    }
+                }, function(){
+                    console.log('googleAuth Fail');
+                })
+            });
+        }
+    </script>
+</head>
+<body>
+    <input type="button" id="loginBtn" value="checking...">
+    <h1>WEB</h1>
+    <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
+</body>
+</html>
