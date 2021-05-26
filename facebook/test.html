@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+    <script>
+
+        window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '822874161968645',
+          cookie     : true,                     // Enable cookies to allow the server to access the session.
+          xfbml      : true,                     // Parse social plugins on this webpage.
+          version    : 'v10.0'                   // Use this Graph API version for this call.
+        });
+    
+    
+        FB.getLoginStatus(function(response) {
+            console.log(response);
+          statusChangeCallback(response);      
+          if(response.status ==='connected'){
+            document.querySelector('#authBtn').value ='Logout';
+          } else {
+            document.querySelector('#authBtn').value ='Login';
+          }
+        });
+      };
+
+    </script>
+</body>
+</html>
+</head>
+<body>
+    <input type="button" id="authBtn" value="checking..." onclick="
+        if(this.value === 'Logout'){
+            FB.login(function(res){
+                console.log('login =>', res);
+            });
+        } else {
+            FB.logout(function(res){
+                console.log('logout =>', res);
+            });
+        }
+    
+    ">
+    <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+    </fb:login-button>
+</body>
+</html>
